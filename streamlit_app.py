@@ -211,7 +211,18 @@ if st.session_state.get('has_submitted', False):
             
             for r in range(1, 6):
                 cell_region = get_region(e, r)
+                
+                # --- [修改重點] 判斷該格子是否要上色 ---
                 is_active = (cell_region == user_region)
+                
+                # 當落點在 3x3 中心，且有特殊選擇時，連帶亮起對應區域
+                if user_region == "center" and special_choice:
+                    if special_choice == "A" and cell_region == "green":
+                        is_active = True   # 選擇 A，亮起綠色(高能消耗)區域
+                    elif special_choice == "B" and cell_region == "blue":
+                        is_active = True   # 選擇 B，亮起藍色(蓄能發展)區域
+                # ----------------------------------------
+                
                 bg_color = colors[cell_region] if is_active else colors["inactive"]
                 if cell_region == "center": bg_color = colors["center"]
                 
